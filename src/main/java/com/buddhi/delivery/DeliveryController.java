@@ -2,11 +2,13 @@ package com.buddhi.delivery;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.hibernate.event.internal.DefaultInitializeCollectionEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @Slf4j
@@ -44,5 +46,11 @@ public class DeliveryController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<Delivery>>(deliveries,HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/filter")
+    public ResponseEntity<Delivery> getDelivery(@RequestBody DeliverFilter deliverFilter){
+        Delivery delivery = deliveryService.findById(deliverFilter.getId());
+        return new ResponseEntity<Delivery>(delivery, HttpStatus.OK);
     }
 }
